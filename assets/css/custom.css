@@ -1,0 +1,85 @@
+/* Custom Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans&family=Poppins&display=swap');
+
+.font-nunito-sans{
+    font-family: "Nunito Sans";
+}
+
+.font-poppins{
+    font-family: "Poppins";
+}
+
+.scrollable-y {
+    overflow-y: auto;
+}
+
+.wh-screen{
+    width: 100vw;
+    height: 100vh;
+}
+
+a{
+    text-decoration: none;
+}
+
+.form-check-input:checked {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+textarea:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus,
+input[type="checkbox"]:focus,
+input[type="checkbox"]:checked,
+.form-select:focus,
+.uneditable-input:focus {   
+  border-color: #dc3545 !important;
+  box-shadow: none;
+  outline: 0 none;
+}
+
+.form-control, .page-link, select, .form-select {
+    border-radius: 0px !important;
+}
+
+.active>.page-link{
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+}
+
+.is-invalid, .is-valid{
+  box-shadow: none !important;
+}
+
+.custom-sidebar {
+    min-width: 250px;
+    width: 250px;
+    max-width: 250px;
+}
+
+.sidebar-item {
+    text-decoration: none;
+}
+
+.sidebar-item:hover {
+    background-color: #e4515f !important;
+    color: white !important;
+}
+
+.sidebar-active {
+    background-color: #dc3545 !important;
+    color: white !important;
+}
