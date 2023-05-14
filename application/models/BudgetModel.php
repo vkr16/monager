@@ -3,7 +3,6 @@ class BudgetModel extends CI_Model
 {
     public function insertBudgetCategory($newBudgetData)
     {
-        $this->db->trans_start();
         $this->db->set($newBudgetData)
             ->insert('budgets');
 

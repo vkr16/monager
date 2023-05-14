@@ -44,7 +44,7 @@
                     </tr>
                 </table>
 
-                <table class="table table-sm table-hover" id="table_budget">
+                <table class="table table-sm table-hover" id="table_record">
                     <thead>
                         <tr>
                             <th class="align-middle">Timestamp</th>
@@ -133,7 +133,7 @@
     <script>
         $(document).ready(() => {
             // Datatables
-            $('#table_budget').DataTable({
+            $('#table_record').DataTable({
                 "ordering": false
             });
         });

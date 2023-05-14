@@ -23,8 +23,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://192.168.70.119/monager/';
-// $config['base_url'] = 'http://localhost/monager/';
+// $config['base_url'] = 'http://192.168.70.119/monager/';
+$config['base_url'] = 'http://localhost/monager/';
 
 
 /*
