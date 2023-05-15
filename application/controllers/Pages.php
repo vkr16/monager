@@ -19,7 +19,8 @@ class Pages extends CI_Controller
 
     public function debtView()
     {
-        $this->load->view('pages/debtView');
+        $data['debts'] = $this->DebtModel->getAllMyDebts();
+        $this->load->view('pages/debtView', $data);
     }
 
     public function loanView()

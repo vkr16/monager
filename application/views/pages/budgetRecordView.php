@@ -131,6 +131,8 @@
     <?php $this->load->view('partial_components/scriptPart'); ?>
 
     <script>
+        $('#sidebar-budget').removeClass('link-dark').addClass('sidebar-active')
+
         $(document).ready(() => {
             // Datatables
             $('#table_record').DataTable({

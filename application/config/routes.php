@@ -68,4 +68,6 @@ $route['budget/record/detail/(:any)'] = 'pages/budgetRecordView/$1';
 
 
 $route['debt'] = 'pages/debtView';
+$route['debt/note/add'] = 'debt/debtNoteAddProcess';
+
 $route['loan'] = 'pages/loanView';

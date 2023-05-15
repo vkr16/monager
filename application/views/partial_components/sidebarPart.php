@@ -8,19 +8,19 @@
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
                 <li class="nav-item">
-                    <a href="<?= base_url('budget') ?>" class="nav-link rounded-0 rounded-0 sidebar-item sidebar-active" aria-current="page">
+                    <a href="<?= base_url('budget') ?>" class="nav-link rounded-0 rounded-0 link-dark sidebar-item" id="sidebar-budget">
                         <i class="fa-solid fa-money-bill-wave fa-fw"></i>&emsp;
                         Budget
                     </a>
                 </li>
                 <li>
-                    <a href="<?= base_url('debt') ?>" class="nav-link rounded-0 link-dark sidebar-item">
+                    <a href="<?= base_url('debt') ?>" class="nav-link rounded-0 link-dark sidebar-item" id="sidebar-debt">
                         <i class="fa-solid fa-money-check-dollar fa-fw"></i>&emsp;
                         Debt
                     </a>
                 </li>
                 <li>
-                    <a href="<?= base_url('loan') ?>" class="nav-link rounded-0 link-dark sidebar-item">
+                    <a href="<?= base_url('loan') ?>" class="nav-link rounded-0 link-dark sidebar-item" id="sidebar-loan">
                         <i class="fa-solid fa-hand-holding-dollar fa-fw"></i>&emsp;
                         Loan
                     </a>
