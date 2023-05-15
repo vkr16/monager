@@ -25,7 +25,8 @@ class Pages extends CI_Controller
 
     public function loanView()
     {
-        $this->load->view('pages/loanView');
+        $data['loans'] = $this->LoanModel->getAllMyLoans();
+        $this->load->view('pages/loanView', $data);
     }
 
     public function budgetRecordView($budgetId)
@@ -50,6 +51,23 @@ class Pages extends CI_Controller
                 $data['debt_payments'] = $this->DebtpayModel->getAllPaymentsOfADebt($data['debtId']);
                 $data['debt_detail'] = $this->DebtModel->getDebtDetail($data['debtId'])[0];
                 $this->load->view('pages/debtPaymentView', $data);
+            } else {
+                $this->load->view('errors/custom/404');
+            }
+        } else {
+            $this->load->view('errors/custom/404');
+        }
+    }
+
+    public function loanNoteView($loanId)
+    {
+        $data['loanId'] = base64_decode(base64_decode(base64_decode(urldecode($loanId))));
+
+        if ($this->LoanModel->isExist($data['loanId'])) {
+            if ($this->LoanModel->isAuthorOf($data['loanId'])) {
+                $data['loan_payments'] = $this->LoanpayModel->getAllPaymentsOfALoan($data['loanId']);
+                $data['loan_detail'] = $this->LoanModel->getLoanDetail($data['loanId'])[0];
+                $this->load->view('pages/loanPaymentView', $data);
             } else {
                 $this->load->view('errors/custom/404');
             }

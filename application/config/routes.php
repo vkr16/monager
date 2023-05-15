@@ -69,7 +69,12 @@ $route['budget/record/detail/(:any)'] = 'pages/budgetRecordView/$1';
 
 $route['debt'] = 'pages/debtView';
 $route['debt/note/add'] = 'debt/debtNoteAddProcess';
+$route['debt/note/delete'] = 'debt/debtNoteDeleteProcess';
 $route['debt/note/detail/(:any)'] = 'pages/debtNoteView/$1';
 $route['debt/payment/add'] = 'debt/debtPaymentAddProcess';
 
 $route['loan'] = 'pages/loanView';
+$route['loan/note/add'] = 'loan/loanNoteAddProcess';
+$route['loan/note/delete'] = 'loan/loanNoteDeleteProcess';
+$route['loan/note/detail/(:any)'] = 'pages/loanNoteView/$1';
+$route['loan/payment/add'] = 'loan/loanPaymentAddProcess';

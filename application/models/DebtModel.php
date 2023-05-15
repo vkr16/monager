@@ -56,4 +56,13 @@ class DebtModel extends CI_Model
 
         return $query->result();
     }
+
+    public function deleteDebtNote($id)
+    {
+        $this->db->set('deleted_at', time())
+            ->where('id', $id)
+            ->update('debts');
+
+        return $this->db->affected_rows() > 0 ? TRUE : FALSE;
+    }
 }

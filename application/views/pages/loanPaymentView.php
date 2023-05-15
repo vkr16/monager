@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Debt Details</title>
+    <title>Loan Details</title>
     <!-- Link -->
     <?php $this->load->view('partial_components/linkPart'); ?>
 </head>
@@ -19,37 +19,37 @@
             <?php $this->load->view('partial_components/topbarPart'); ?>
             <!-- Main Content -->
             <div class="mx-2 mx-lg-5 my-4 px-3 py-2 table-responsive">
-                <h2 class="fw-semibold">Debt Note</h2>
+                <h2 class="fw-semibold">Loan Note</h2>
                 <hr class="mt-05" style="max-width: 200px;border: 2px solid; opacity: 1 ">
                 <div class="d-flex flex-wrap mb-5">
-                    <button class="btn btn-sm btn-dark rounded-0 mb-3" onclick="backToDebtList()">
+                    <button class="btn btn-sm btn-dark rounded-0 mb-3" onclick="backToLoanList()">
                         <i class="fa-solid fa-arrow-left fa-fw"></i>&nbsp; Back
                     </button>&emsp;
-                    <?= $debt_detail->payment_status == 2 ? '' : '<button class="btn btn-sm btn-danger rounded-0 mb-3" onclick="openAddPaymentModal(\'' . $debt_detail->id . '\')">
+                    <?= $loan_detail->payment_status == 2 ? '' : '<button class="btn btn-sm btn-danger rounded-0 mb-3" onclick="openAddPaymentModal(\'' . $loan_detail->id . '\')">
                         <i class="fa-regular fa-bookmark fa-fw"></i>&nbsp; New Payment Record
                     </button>&emsp;' ?>
-                    <button class="btn btn-sm btn-outline-danger rounded-0 mb-3" onclick="deleteDebtNote('<?= $debt_detail->id ?>')">
+                    <button class="btn btn-sm btn-outline-danger rounded-0 mb-3" onclick="deleteLoanNote('<?= $loan_detail->id ?>')">
                         <i class="fa-solid fa-radiation fa-fw"></i>&nbsp; Delete
                     </button>
                 </div>
 
                 <table class="table table-sm fw-bold">
                     <tr>
-                        <td class="align-middle">Lender / Creditor</td>
-                        <td class="align-middle">: <?= $debt_detail->lender ?></td>
+                        <td class="align-middle">Borrower</td>
+                        <td class="align-middle">: <?= $loan_detail->borrower ?></td>
                     </tr>
                     <tr>
-                        <td class="align-middle">Debt</td>
-                        <td class="align-middle">: Rp <?= number_format($debt_detail->amount, 0, ',', '.') ?></td>
+                        <td class="align-middle">Loan</td>
+                        <td class="align-middle">: Rp <?= number_format($loan_detail->amount, 0, ',', '.') ?></td>
                     </tr>
                     <tr>
                         <td class="align-middle">Description</td>
-                        <td class="align-middle">: <?= $debt_detail->description ?></td>
+                        <td class="align-middle">: <?= $loan_detail->description ?></td>
                     </tr>
                     <tr>
                         <td class="align-middle">Status</td>
                         <td class="align-middle">:
-                            <?php switch ($debt_detail->payment_status) {
+                            <?php switch ($loan_detail->payment_status) {
                                 case 0:
                                     echo '<span class="badge rounded-pill text-bg-danger">Unpaid</span>';
                                     break;
@@ -67,18 +67,18 @@
                     </tr>
                     <tr>
                         <td class="align-middle">Paid</td>
-                        <td class="align-middle">: Rp <?= number_format($debt_detail->paid, 0, ',', '.') ?></td>
+                        <td class="align-middle">: Rp <?= number_format($loan_detail->paid, 0, ',', '.') ?></td>
                     </tr>
                     <tr>
                         <td class="align-middle">Unpaid</td>
-                        <td class="align-middle">: Rp <?= number_format($debt_detail->unpaid, 0, ',', '.') ?></td>
+                        <td class="align-middle">: Rp <?= number_format($loan_detail->unpaid, 0, ',', '.') ?></td>
                     </tr>
                     <tr>
                         <td class="align-middle">Due date</td>
                         <td class="align-middle">
-                            : <?= date('j F Y', $debt_detail->due_date) ?>
+                            : <?= date('j F Y', $loan_detail->due_date) ?>
                             (<?php
-                                $days = ceil(($debt_detail->due_date - time()) / (60 * 60 * 24));
+                                $days = ceil(($loan_detail->due_date - time()) / (60 * 60 * 24));
                                 echo abs($days);
                                 echo abs($days) > 1 ? ' days' : ' day';
                                 echo $days < 0 ? ' ago' : ' left';
@@ -97,14 +97,14 @@
                     </thead>
                     <tbody>
                         <?php
-                        foreach ($debt_payments as $key => $debt_payment) {
+                        foreach ($loan_payments as $key => $loan_payment) {
                         ?>
                             <tr>
-                                <td class="align-middle small"><?= date('d/m/y H:i A', $debt_payment->created_at) ?></td>
-                                <td class="text-end align-middle small <?= $debt_payment->amount ?>">
-                                    <?= 'Rp ' . number_format($debt_payment->amount, 0, ',', '.') ?>
+                                <td class="align-middle small"><?= date('d/m/y H:i A', $loan_payment->created_at) ?></td>
+                                <td class="text-end align-middle small <?= $loan_payment->amount ?>">
+                                    <?= 'Rp ' . number_format($loan_payment->amount, 0, ',', '.') ?>
                                 </td>
-                                <td class="small text-end d-none d-md-table-cell"><?= $debt_payment->channel == 0 ? 'Cashless' : 'Cash' ?></td>
+                                <td class="small text-end d-none d-md-table-cell"><?= $loan_payment->channel == 0 ? 'Cashless' : 'Cash' ?></td>
                             </tr>
                         <?php
                         }
@@ -149,7 +149,7 @@
     <?php $this->load->view('partial_components/scriptPart'); ?>
 
     <script>
-        $('#sidebar-debt').removeClass('link-dark').addClass('sidebar-active')
+        $('#sidebar-loan').removeClass('link-dark').addClass('sidebar-active')
 
         $(document).ready(() => {
             // Datatables
@@ -159,18 +159,18 @@
         });
 
 
-        function openAddPaymentModal(debtId) {
+        function openAddPaymentModal(loanId) {
             $('#modalAddPaymentRecord').modal('show');
-            $('#submitNewPaymentRecordButton').attr('onclick', "submitNewPaymentRecord('" + debtId + "')");
+            $('#submitNewPaymentRecordButton').attr('onclick', "submitNewPaymentRecord('" + loanId + "')");
         }
 
-        function submitNewPaymentRecord(debtId) {
+        function submitNewPaymentRecord(loanId) {
             const amount = $('#inputAmount').val();
             const channel = $('#inputChannel').val();
             Notiflix.Block.dots('#modalDialogAddPaymentRecord');
 
-            $.post("<?= base_url('debt/payment/add') ?>", {
-                    id: debtId,
+            $.post("<?= base_url('loan/payment/add') ?>", {
+                    id: loanId,
                     amount: amount,
                     channel: channel
                 })
@@ -197,10 +197,10 @@
                                 window.location.reload();
                             }, 1200);
                             break;
-                        case 'ERR_PAYMENT_MORE_THAN_DEBT':
+                        case 'ERR_PAYMENT_MORE_THAN_LOAN':
                             Notiflix.Report.failure(
                                 'Failed',
-                                'Debt payments should not exceed the amount owed',
+                                'Loan payments should not exceed the amount owed',
                                 'Okay'
                             );
                             break;
@@ -216,15 +216,15 @@
             Notiflix.Notify.info(desc);
         }
 
-        function backToDebtList() {
+        function backToLoanList() {
             Notiflix.Loading.pulse();
-            window.location.href = "<?= base_url('debt') ?>";
+            window.location.href = "<?= base_url('loan') ?>";
         }
 
-        function deleteDebtNote(debtId) {
+        function deleteLoanNote(loanId) {
             const randomConfirmation = generateRandomString(4);
             Notiflix.Confirm.prompt(
-                'Confirm Delete Debt Note',
+                'Confirm Delete Loan Note',
                 'Please write down "' + randomConfirmation + '" to confirm deletion',
                 '',
                 'Send',
@@ -232,25 +232,25 @@
                 (clientAnswer) => {
                     if (clientAnswer === randomConfirmation) {
                         //    continue delete
-                        $.post('<?= base_url('debt/note/delete') ?>', {
-                                id: debtId
+                        $.post('<?= base_url('loan/note/delete') ?>', {
+                                id: loanId
                             })
                             .done((data) => {
                                 switch (data) {
-                                    case 'SUCCESS_DEBT_NOTE_DELETED':
+                                    case 'SUCCESS_LOAN_NOTE_DELETED':
                                         Notiflix.Report.success(
                                             'Success Alert',
-                                            'Debt note deleted successfully',
+                                            'Loan note deleted successfully',
                                             'Okay',
                                             () => {
                                                 Notiflix.Loading.pulse();
                                                 setTimeout(() => {
-                                                    window.location.href = '<?= base_url('debt') ?>';
+                                                    window.location.href = '<?= base_url('loan') ?>';
                                                 }, 1000);
                                             }
                                         );
                                         break;
-                                    case 'ERR_DEBT_NOTE_NOT_DELETED':
+                                    case 'ERR_LOAN_NOTE_NOT_DELETED':
                                         Notiflix.Report.failure(
                                             'Failed',
                                             'Failed to delete debt note',

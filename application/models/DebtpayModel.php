@@ -37,9 +37,9 @@ class DebtpayModel extends CI_Model
             ];
             if ($debtData['unpaid'] == 0) {
                 $debtData['payment_status'] = 2;
+            } else {
+                $debtData['payment_status'] = 1;
             }
-
-
 
             $this->db->set($debtData)
                 ->where('id', $data['debt_id'])
