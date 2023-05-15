@@ -3,6 +3,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Debt extends CI_Controller
 {
+    function __construct()
+    {
+        parent::__construct();
+
+        isLoggedIn();
+    }
 
     public function debtNoteAddProcess()
     {
@@ -31,6 +37,37 @@ class Debt extends CI_Controller
                 echo 'SUCCESS_DEBT_NOTE_INSERTED';
             } else {
                 echo 'ERR_DEBT_NOTE_NOT_INSERTED';
+            }
+        }
+    }
+
+    public function debtPaymentAddProcess()
+    {
+        $data['debt_id'] = $this->input->post('id');
+        $data['amount'] = $this->input->post('amount');
+        $data['channel'] = $this->input->post('channel');
+
+        $data['created_at'] = time();
+
+        $this->form_validation->set_rules('amount', 'amount', 'required|numeric');
+
+        if ($this->form_validation->run() == FALSE) {
+            echo explode('<.0.>', validation_errors())[0];
+        } else {
+            $insert = $this->DebtpayModel->insertPaymentRecord($data);
+            switch ($insert) {
+                case 0:
+                    echo 'ERR_PAYMENT_RECORD_NOT_INSERTED';
+                    break;
+                case 1:
+                    echo 'SUCCESS_PAYMENT_RECORD_INSERTED';
+                    break;
+                case 2:
+                    echo 'ERR_PAYMENT_MORE_THAN_DEBT';
+                    break;
+                default:
+                    echo 'ERR_PAYMENT_RECORD_NOT_INSERTED';
+                    break;
             }
         }
     }

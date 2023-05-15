@@ -1,6 +1,6 @@
 <?php
 
-class DebtModel extends CI_Model
+class LoanModel extends CI_Model
 {
     public function insertDebtNote($debtNote)
     {
@@ -34,26 +34,14 @@ class DebtModel extends CI_Model
         return $count > 0 ? TRUE : FALSE;
     }
 
-    public function isAuthorOf($debtId)
-    {
-        $user_id = $this->UserModel->getUserIdBySession();
-
-        $query = $this->db->select('user_id')
-            ->from('debts')
-            ->where('id', $debtId)
-            ->get();
-
-        return $user_id == $query->result()[0]->user_id ? TRUE : FALSE;
-    }
-
     public function getDebtDetail($debtId)
     {
-        $query = $this->db->select('id,amount,lender,description,payment_status,paid,unpaid,due_date,created_at')
+        $query = $this->db->select('amount,lender,description,payment_status,paid,unpaid,due_date,created_at')
             ->from('debts')
             ->where('id', $debtId)
             ->where('deleted_at', NULL)
             ->get();
 
-        return $query->result();
+        return $query->result();    
     }
 }

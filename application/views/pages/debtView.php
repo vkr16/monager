@@ -42,24 +42,26 @@
                         foreach ($debts as $key => $debt) {
                         ?>
                             <tr>
-                                <td class="align-middle"><?php switch ($debt->payment_status) {
-                                                                case 0:
-                                                                    echo '<span class="badge rounded-pill text-bg-danger">Unpaid</span>';
-                                                                    break;
-                                                                case 1:
-                                                                    echo '<span class="badge rounded-pill text-bg-primary">Outstanding</span>';
-                                                                    break;
-                                                                case 2:
-                                                                    echo '<span class="badge rounded-pill text-bg-success">Paid</span>';
-                                                                    break;
-                                                                default:
-                                                                    echo '<span class="badge rounded-pill text-bg-dark">Unknown</span>';
-                                                                    break;
-                                                            } ?></td>
-                                <td class="align-middle d-none d-md-table-cell"><?= $debt->lender ?></td>
-                                <td class="align-middle text-end">Rp <?= number_format($debt->amount, 0, ',', '.') ?></td>
-                                <td class="align-middle text-end"><?= date('d/m/y', $debt->due_date) ?></td>
-                                <td class="align-middle text-end"><button class="btn btn-danger rounded-0"><i class="fa-regular fa-plus-square"></i></button></td>
+                                <td class="align-middle" role="button" onclick="debtDetail('<?= $debt->id ?>')">
+                                    <?php switch ($debt->payment_status) {
+                                        case 0:
+                                            echo '<span class="badge rounded-pill text-bg-danger">Unpaid</span>';
+                                            break;
+                                        case 1:
+                                            echo '<span class="badge rounded-pill text-bg-primary">Outstanding</span>';
+                                            break;
+                                        case 2:
+                                            echo '<span class="badge rounded-pill text-bg-success">Paid</span>';
+                                            break;
+                                        default:
+                                            echo '<span class="badge rounded-pill text-bg-dark">Unknown</span>';
+                                            break;
+                                    } ?>
+                                </td>
+                                <td class="align-middle d-none d-md-table-cell" role="button" onclick="debtDetail('<?= $debt->id ?>')"><?= $debt->lender ?></td>
+                                <td class="align-middle text-end" role="button" onclick="debtDetail('<?= $debt->id ?>')">Rp <?= number_format($debt->amount, 0, ',', '.') ?></td>
+                                <td class="align-middle text-end" role="button" onclick="debtDetail('<?= $debt->id ?>')"><?= date('d/m/y', $debt->due_date) ?></td>
+                                <td class="align-middle text-end"><button class="btn btn-danger rounded-0 <?= $debt->payment_status == 2 ? 'disabled' : '' ?>" onclick="openAddPaymentModal('<?= $debt->id ?>')"><i class="fa-regular fa-plus-square"></i></button></td>
                             </tr>
                         <?php
                         }
@@ -99,6 +101,34 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-dark rounded-0" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-danger rounded-0" onclick="submitNewDebtNote()">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalAddPaymentRecord" tabindex="-1" aria-labelledby="modalAddPaymentRecordLabel" aria-hidden="true">
+        <div class="modal-dialog" id="modalDialogAddPaymentRecord">
+            <div class="modal-content rounded-0">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalAddPaymentRecordLabel">Add Payment Record</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="inputAmountPayment">Amount</label>
+                        <input type="number" class="form-control" id="inputAmountPayment" placeholder="ex: 50000">
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputChannel">Transaction Channel</label>
+                        <select id="inputChannel" class="form-select">
+                            <option value="0">Cashless (Bank transfer, Gopay, Dana, SPay etc)</option>
+                            <option value="1">Cash</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark rounded-0" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger rounded-0" id="submitNewPaymentRecordButton">Save changes</button>
                 </div>
             </div>
         </div>
@@ -166,6 +196,65 @@
             var dateObject = new Date(dateInput);
             var unixTimestamp = dateObject.getTime() / 1000;
             return unixTimestamp;
+        }
+
+        function debtDetail(debtId) {
+            debtId = encodeURIComponent(btoa(btoa(btoa(debtId))));
+
+            window.location.href = '<?= base_url('debt/note/detail/') ?>' + debtId;
+        }
+
+        function openAddPaymentModal(debtId) {
+            $('#modalAddPaymentRecord').modal('show');
+            $('#submitNewPaymentRecordButton').attr('onclick', "submitNewPaymentRecord('" + debtId + "')");
+        }
+
+        function submitNewPaymentRecord(debtId) {
+            const amount = $('#inputAmountPayment').val();
+            const channel = $('#inputChannel').val();
+            Notiflix.Block.dots('#modalDialogAddPaymentRecord');
+
+            $.post("<?= base_url('debt/payment/add') ?>", {
+                    id: debtId,
+                    amount: amount,
+                    channel: channel
+                })
+                .done((data) => {
+                    Notiflix.Block.remove('#modalDialogAddPaymentRecord');
+
+                    switch (data) {
+                        case 'SUCCESS_PAYMENT_RECORD_INSERTED':
+                            Notiflix.Report.success(
+                                'Success Alert',
+                                'A new payment record has been added successfully',
+                                'Okay',
+                                () => {
+                                    Notiflix.Loading.pulse();
+                                    setTimeout(() => {
+                                        window.location.reload();
+                                    }, 1000);
+                                }
+                            );
+                            break;
+                        case 'ERR_PAYMENT_RECORD_NOT_INSERTED':
+                            Notiflix.Notify.failure('Failed to add new payment record');
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1200);
+                            break;
+                        case 'ERR_PAYMENT_MORE_THAN_DEBT':
+                            Notiflix.Report.failure(
+                                'Failed',
+                                'Debt payments should not exceed the amount owed',
+                                'Okay'
+                            );
+                            break;
+                        default:
+                            Notiflix.Notify.failure(data);
+                            // console.log(data);
+                            break;
+                    }
+                })
         }
     </script>
 </body>

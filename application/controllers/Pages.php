@@ -28,7 +28,6 @@ class Pages extends CI_Controller
         $this->load->view('pages/loanView');
     }
 
-
     public function budgetRecordView($budgetId)
     {
         $data['budgetId'] = base64_decode(base64_decode(base64_decode(urldecode($budgetId))));
@@ -37,6 +36,23 @@ class Pages extends CI_Controller
             $data['budgetDetail'] = $this->BudgetModel->getBudgetDetail($data['budgetId'])[0];
 
             $this->load->view('pages/budgetRecordView', $data);
+        } else {
+            $this->load->view('errors/custom/404');
+        }
+    }
+
+    public function debtNoteView($debtId)
+    {
+        $data['debtId'] = base64_decode(base64_decode(base64_decode(urldecode($debtId))));
+
+        if ($this->DebtModel->isExist($data['debtId'])) {
+            if ($this->DebtModel->isAuthorOf($data['debtId'])) {
+                $data['debt_payments'] = $this->DebtpayModel->getAllPaymentsOfADebt($data['debtId']);
+                $data['debt_detail'] = $this->DebtModel->getDebtDetail($data['debtId'])[0];
+                $this->load->view('pages/debtPaymentView', $data);
+            } else {
+                $this->load->view('errors/custom/404');
+            }
         } else {
             $this->load->view('errors/custom/404');
         }
