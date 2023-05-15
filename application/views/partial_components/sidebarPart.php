@@ -30,15 +30,15 @@
             <div class="dropup-center px-3">
                 <a href="#" class="d-flex align-items-center link-dark text-decoration-none " data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fa-solid fa-user"></i>&emsp;
-                    <p class="mb-0">Fikri Miftah Akmaludin</p>
+                    <p class="mb-0"><?= $this->UserModel->getUserNameBySession() ?></p>
                 </a>
                 <ul class="dropdown-menu text-small shadow rounded-0">
-                    <li><a class="dropdown-item" href="#">New project...</a></li>
+                    <!-- <li><a class="dropdown-item" href="#">New project...</a></li>
                     <li><a class="dropdown-item" href="#">Settings</a></li>
                     <li><a class="dropdown-item" href="#">Profile</a></li>
                     <li>
                         <hr class="dropdown-divider">
-                    </li>
+                    </li> -->
                     <li><a class="dropdown-item" href="<?= base_url('logout') ?>">Sign out</a></li>
                 </ul>
             </div>

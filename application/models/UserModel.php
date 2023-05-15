@@ -41,4 +41,16 @@ class UserModel extends CI_Model
 
         return $query->result()[0]->id;
     }
+
+    public function getUserNameBySession()
+    {
+        $email = base64_decode($this->session->monager_user);
+        $query = $this->db->select('name')
+            ->from('users')
+            ->where('email', $email)
+            ->where('deleted_at', NULL)
+            ->get();
+
+        return $query->result()[0]->name;
+    }
 }
