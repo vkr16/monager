@@ -21,12 +21,14 @@ class Pages extends CI_Controller
     public function debtView()
     {
         $data['debts'] = $this->DebtModel->getAllMyDebts();
+        $data['unpaidDebt'] = $this->DebtModel->getTotalUnpaidDebt()->unpaidDebt;
         $this->load->view('pages/debtView', $data);
     }
 
     public function loanView()
     {
         $data['loans'] = $this->LoanModel->getAllMyLoans();
+        $data['unpaidLoan'] = $this->LoanModel->getTotalUnpaidLoan()->unpaidLoan;
         $this->load->view('pages/loanView', $data);
     }
 

@@ -83,6 +83,7 @@ class BudgetModel extends CI_Model
 
         $query = $this->db->select('sum(budget) as total_budget')
             ->from('budgets')
+            ->where('user_id', $user_id)
             ->where('deleted_at', NULL)
             ->get();
 

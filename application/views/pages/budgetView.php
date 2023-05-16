@@ -21,7 +21,7 @@
             <div class="mx-2 mx-lg-5 my-4 px-3 py-2">
                 <h2 class="fw-semibold">Budget List</h2>
                 <hr class="mt-05" style="max-width: 200px;border: 2px solid; opacity: 1 ">
-                <h6>Total Budget : <span class="fw-bold"> Rp <?= number_format($totalBudgetAllocated, 0, ',', '.') ?></span></h6>
+                <span class="bg-white text-dark border border-1 border-dark rounded-0 px-2 py-1">Total Budget : Rp <?= number_format($totalBudgetAllocated, 0, ',', '.') ?></span><br><br>
                 <div class="d-flex mb-5">
                     <button class="btn btn-danger btn-sm rounded-0" data-bs-toggle="modal" data-bs-target="#modalAddBudgetCategory">
                         <i class="fa-regular fa-bookmark fa-fw"></i>&nbsp; New Category

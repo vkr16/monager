@@ -65,4 +65,17 @@ class LoanModel extends CI_Model
 
         return $this->db->affected_rows() > 0 ? TRUE : FALSE;
     }
+
+    public function getTotalUnpaidLoan()
+    {
+        $user_id = $this->UserModel->getUserIdBySession();
+
+        $query = $this->db->select('sum(unpaid) as unpaidLoan')
+            ->from('loans')
+            ->where('user_id', $user_id)
+            ->where('deleted_at', NULL)
+            ->get();
+
+        return $query->result()[0];
+    }
 }
