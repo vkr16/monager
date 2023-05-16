@@ -14,6 +14,7 @@ class Pages extends CI_Controller
     public function budgetView()
     {
         $data['categories'] = $this->BudgetModel->getBudgetCategoriesForCurrentUser();
+        $data['totalBudgetAllocated'] = $this->BudgetModel->getTotalBudgetAllocated()->total_budget;
         $this->load->view('pages/budgetView', $data);
     }
 

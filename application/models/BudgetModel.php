@@ -76,4 +76,16 @@ class BudgetModel extends CI_Model
 
         return $this->db->affected_rows() > 0 ? TRUE : FALSE;
     }
+
+    public function getTotalBudgetAllocated()
+    {
+        $user_id = $this->UserModel->getUserIdBySession();
+
+        $query = $this->db->select('sum(budget) as total_budget')
+            ->from('budgets')
+            ->where('deleted_at', NULL)
+            ->get();
+
+        return $query->result()[0];
+    }
 }
