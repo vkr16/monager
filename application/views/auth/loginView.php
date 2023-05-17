@@ -6,10 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="shortcut icon" href="<?= base_url('assets/img/logo.png') ?>" type="image/x-icon">
-    <link rel="stylesheet" href="<?= base_url('assets/library/bootstrap-5.2.1/css/bootstrap.min.css') ?>">
-    <link rel="stylesheet" href="<?= base_url('assets/library/fontawesome-6.2.0/css/all.min.css') ?>">
-    <link rel="stylesheet" href="<?= base_url('assets/css/custom.css') ?>">
+    <?php $this->load->view('partial_components/linkPart') ?>
 </head>
 
 <body>
@@ -32,12 +29,12 @@
                     <input type="checkbox" class="form-check-input rounded-0 mt-0" id="checkShowpassword" onchange="passwordVisible()">
                     <label for="checkShowpassword" class="form-label mb-0 ms-2">Show password</label>
                 </div>
-                <a href="reset-password.php" class="text-danger ms-auto">Forgot password?</a>
+                <a href="<?= base_url('recovery') ?>" class="text-danger ms-auto">Forgot password?</a>
             </div>
             <button class="btn btn-danger rounded-0" onclick="submitLogin()"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
 
             <p class="mt-3">Or <a href="<?= base_url('register') ?>" class="text-danger">Create an account</a></p>
-            <p class="small text-muted text-center mt-5">&copy; <?= '2022 -' . date('Y') ?> Fikri Miftah Akmaludin</p>
+            <p class="small text-muted text-center mt-5">&copy; <?= '2022 - ' . date('Y') ?> Fikri Miftah Akmaludin</p>
         </div>
     </div>
 

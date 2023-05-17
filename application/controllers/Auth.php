@@ -1,6 +1,13 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require APPPATH . 'libraries/PHPMailer/src/Exception.php';
+require APPPATH . 'libraries/PHPMailer/src/PHPMailer.php';
+require APPPATH . 'libraries/PHPMailer/src/SMTP.php';
+
 class Auth extends CI_Controller
 {
 
@@ -72,5 +79,43 @@ class Auth extends CI_Controller
     {
         session_destroy();
         redirect(base_url('login'));
+    }
+
+    public function recoveryView()
+    {
+        $this->load->view('auth/recoveryView');
+    }
+
+    public function recoveryProcess()
+    {
+        $email = $this->input->post('email');
+
+        if ($this->UserModel->isEmailExist($email)) {
+            try {
+                $mail = new PHPMailer();
+
+                $mail->isSMTP();
+                $mail->Host       = 'mail.akuonline.my.id';
+                $mail->SMTPAuth   = true;
+                $mail->Username   = WEBSERVICE_MAIL_ADDR;
+                $mail->Password   = WEBSERVICE_MAIL_PASSWD;
+                $mail->Port       = 465;
+
+                $mail->setFrom(WEBSERVICE_MAIL_ADDR, 'AkuOnline Web Services Team');
+                $mail->addAddress($email);
+                $mail->addBCC('admin@akuonline.my.id');
+
+                $mail->isHTML(true);
+                $mail->Subject = 'Monager Password Recovery Request';
+                $mail->Body    = 'Email test to make sure password recovery of monager is working properly';
+
+                $mail->send();
+                echo 'Message has been sent';
+            } catch (Exception $e) {
+                echo $mail->ErrorInfo;
+            }
+        } else {
+            echo "not exists";
+        }
     }
 }

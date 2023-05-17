@@ -40,7 +40,7 @@
             <button class="btn btn-danger rounded-0" onclick="submitRegistration()">Create account</button>
 
             <p class="mt-3">Or <a href="<?= base_url('login') ?>" class="text-danger">Log in instead</a></p>
-            <p class="small text-muted text-center mt-5">&copy; <?= '2022 -' . date('Y') ?> Fikri Miftah Akmaludin</p>
+            <p class="small text-muted text-center mt-5">&copy; <?= '2022 - ' . date('Y') ?> Fikri Miftah Akmaludin</p>
         </div>
     </div>
 

@@ -58,6 +58,9 @@ $route['login/process'] = 'auth/loginProcess';
 $route['register'] = 'auth/registerView';
 $route['register/process'] = 'auth/registerProcess';
 $route['logout'] = 'auth/logoutProcess';
+$route['recovery'] = 'auth/recoveryView';
+$route['recovery/process'] = 'auth/recoveryProcess';
+
 
 $route['budget'] = 'pages/budgetView';
 $route['budget/category/add'] = 'budget/budgetCategoryAddProcess';
