@@ -32,6 +32,10 @@
     <script>
         function requestRecovery() {
             const email = $('#inputEmail').val();
+            if ($('#inputEmail').val() == '') {
+                Notiflix.Notify.warning('Email can not be empty');
+                return;
+            }
             Notiflix.Loading.standard();
 
             $.post('<?= base_url('recovery/process') ?>', {
@@ -39,7 +43,23 @@
                 })
                 .done((data) => {
                     Notiflix.Loading.remove();
-                    console.log(data);
+                    switch (data) {
+                        case 'ERR_FAILED_TO_SEND_EMAIL':
+                            Notiflix.Notify.failure('Failed to send email');
+                            break;
+                        case 'SUCCESS_EMAIL_SENT':
+                            Notiflix.Notify.success('Verification code has been sent successfully');
+                            break;
+                        case 'ERR_FAILED_TO_INSERT_VERIFICATION_CODE':
+                            Notiflix.Report.failure('DB ERROR', 'Failed to create a verification code', 'Ok');
+                            break;
+                        case 'ERR_EMAIL_NOT_FOUND':
+                            Notiflix.Report.failure('Error', 'Email not registered, please make sure you didn\'t misspelled it', 'Ok');
+                            break;
+                        default:
+                            console.info(data);
+                            break;
+                    }
                 })
         }
     </script>

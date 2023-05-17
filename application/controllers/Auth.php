@@ -1,13 +1,6 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-require APPPATH . 'libraries/PHPMailer/src/Exception.php';
-require APPPATH . 'libraries/PHPMailer/src/PHPMailer.php';
-require APPPATH . 'libraries/PHPMailer/src/SMTP.php';
-
 class Auth extends CI_Controller
 {
 
@@ -91,31 +84,56 @@ class Auth extends CI_Controller
         $email = $this->input->post('email');
 
         if ($this->UserModel->isEmailExist($email)) {
-            try {
-                $mail = new PHPMailer();
+            $this->email->from(WEBSERVICE_MAIL_ADDR, WEBSERVICE_MAIL_NAME);
+            $this->email->to($email);
+            $this->email->bcc('admin@akuonline.my.id');
+            $this->email->subject('Monager Password Reset Link');
+            $code = $this->generateVerificationCode($email);
+            $this->form_validation->set_data(['code' => $code]);
+            $this->form_validation->set_rules('code', 'code', 'is_unique[users.code]');
 
-                $mail->isSMTP();
-                $mail->Host       = 'mail.akuonline.my.id';
-                $mail->SMTPAuth   = true;
-                $mail->Username   = WEBSERVICE_MAIL_ADDR;
-                $mail->Password   = WEBSERVICE_MAIL_PASSWD;
-                $mail->Port       = 465;
+            if ($this->form_validation->run() == FALSE) {
+                $this->generateVerificationCode($email);
+            }
 
-                $mail->setFrom(WEBSERVICE_MAIL_ADDR, 'AkuOnline Web Services Team');
-                $mail->addAddress($email);
-                $mail->addBCC('admin@akuonline.my.id');
+            $expiration = time() + (60 * 60 * 3);
 
-                $mail->isHTML(true);
-                $mail->Subject = 'Monager Password Recovery Request';
-                $mail->Body    = 'Email test to make sure password recovery of monager is working properly';
-
-                $mail->send();
-                echo 'Message has been sent';
-            } catch (Exception $e) {
-                echo $mail->ErrorInfo;
+            $this->email->message(
+                '<br><center><h3>ACCOUNT RECOVERY</h3><br>Here is your recovery link <br><br><a href="' . base_url('recovery/verification/') . urlencode(base64_encode($email)) . urlencode(base64_encode($code)) . '/"><h1>RESET PASSWORD</h1></a><br>OR<br><br><code>' . base_url('recovery/verification/') . urlencode(base64_encode($email)) . urlencode(base64_encode($code)) . '</code><br><br><small>The link will remain valid until ' . date('d-m-Y H:i:s', $expiration) . ' (GMT+7)</small></center><br><br>'
+            );
+            $this->db->trans_start();
+            if ($this->UserModel->insertNewVerificationCode($email, $code, $expiration)) {
+                if (!$this->email->send()) {
+                    $this->db->trans_rollback();
+                    echo "ERR_FAILED_TO_SEND_EMAIL";
+                } else {
+                    $this->db->trans_commit();
+                    echo "SUCCESS_EMAIL_SENT";
+                }
+            } else {
+                echo 'ERR_FAILED_TO_INSERT_VERIFICATION_CODE';
             }
         } else {
-            echo "not exists";
+            echo "ERR_EMAIL_NOT_FOUND";
         }
+    }
+
+    public function generateVerificationCode($email)
+    {
+        $characters = '0123456789';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < 6; $i++) {
+            $randomString .= $characters[random_int(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
+    public function recoveryVerificationView($email, $code)
+    {
+        $email = base64_decode(urldecode($email));
+        $code = base64_decode(urldecode($code));
+
+        $this->UserModel->isRecoveryCodeValid($email, $code);
     }
 }

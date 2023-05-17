@@ -60,6 +60,7 @@ $route['register/process'] = 'auth/registerProcess';
 $route['logout'] = 'auth/logoutProcess';
 $route['recovery'] = 'auth/recoveryView';
 $route['recovery/process'] = 'auth/recoveryProcess';
+$route['recovery/verification/(:any)/(:any)'] = 'auth/recoveryVerificationView/$1/$2';
 
 
 $route['budget'] = 'pages/budgetView';

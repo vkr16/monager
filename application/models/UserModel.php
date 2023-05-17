@@ -42,6 +42,17 @@ class UserModel extends CI_Model
         return $query->result()[0]->id;
     }
 
+    public function getUserIdByEmail($email)
+    {
+        $query = $this->db->select('id')
+            ->from('users')
+            ->where('email', $email)
+            ->where('deleted_at', NULL)
+            ->get();
+
+        return $query->result()[0]->id;
+    }
+
     public function getUserNameBySession()
     {
         $email = base64_decode($this->session->monager_user);
@@ -52,5 +63,21 @@ class UserModel extends CI_Model
             ->get();
 
         return $query->result()[0]->name;
+    }
+
+    public function insertNewVerificationCode($email, $code, $expiration)
+    {
+        $user_id = $this->getUserIdByEmail($email);
+        $this->db->set(['code' => $code, 'code_expiration' => $expiration])
+            ->where('id', $user_id)
+            ->update('users');
+
+        return $this->db->affected_rows() > 0 ? TRUE : FALSE;
+    }
+
+    public function isRecoveryCodeValid($email, $code)
+    {
+        // LAST HERE DO SOMETHING TO CHECK IS RECOVERY LINK VALID TO A SPECIFIC USER THEN SHOW A NEW PASSWORD FORM ELSE KICK OUT FROM THIS URL
+
     }
 }

@@ -92,4 +92,5 @@ defined('EXIT__AUTO_MAX')      or define('EXIT__AUTO_MAX', 125); // highest auto
  * BY FM
  */
 defined('WEBSERVICE_MAIL_ADDR')      or define('WEBSERVICE_MAIL_ADDR', 'webservice@akuonline.my.id'); // email address to be used by system
-defined('WEBSERVICE_MAIL_PASSWD')      or define('WEBSERVICE_MAIL_PASSWD', 'IWx&0g_C!!mS'); // email password to be used by system
+defined('WEBSERVICE_MAIL_PASSWD')      or define('WEBSERVICE_MAIL_PASSWD', 'webservicemail@akuonline'); // email password to be used by system
+defined('WEBSERVICE_MAIL_NAME')      or define('WEBSERVICE_MAIL_NAME', 'AkuOnline Web Service Team'); // email name to be used by system
