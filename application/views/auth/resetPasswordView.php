@@ -40,9 +40,7 @@
         </div>
     </div>
 
-    <script src="<?= base_url('assets/library/bootstrap-5.2.1/js/bootstrap.min.js') ?>"></script>
-    <script src="<?= base_url('assets/library/jquery-3.6.1.min.js') ?>"></script>
-    <script src="<?= base_url('assets/library/notiflix-aio-3.2.5.min.js') ?>"></script>
+    <?php $this->load->view('partial_components/scriptPart'); ?>
 
     <script>
         function passwordVisible() {
