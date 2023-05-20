@@ -33,7 +33,7 @@
                     <label for="checkShowpassword" class="form-label mb-0 ms-2">Show password</label>
                 </div>
             </div>
-            <button class="btn btn-danger rounded-0" onclick="isMatch()">Create account</button>
+            <button class="btn btn-danger rounded-0" onclick="isMatch()">Set Password</button>
 
             <p class="mt-3">Or <a href="<?= base_url('login') ?>" class="text-danger">Log in instead</a></p>
             <p class="small text-muted text-center mt-5">&copy; <?= '2022 - ' . date('Y') ?> Fikri Miftah Akmaludin</p>

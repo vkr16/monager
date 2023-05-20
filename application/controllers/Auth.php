@@ -138,7 +138,8 @@ class Auth extends CI_Controller
         if ($this->UserModel->isRecoveryCodeValid($data['email'], $code) == true) {
             $this->load->view('auth/resetPasswordView', $data);
         } else {
-            $this->load->view('errors/custom/403');
+            $data['err_message'] = "Your recovery link seems to be invalid or expired";
+            $this->load->view('errors/custom/403', $data);
         }
     }
 
@@ -152,7 +153,9 @@ class Auth extends CI_Controller
             ->where('email', $email)
             ->update('users');
 
-        $result = $this->db->affected_rows();
+        $this->db->set(['code' => NULL, 'code_expiration' => NULL])
+            ->where('email', $email)
+            ->update('users');
 
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();

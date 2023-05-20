@@ -48,7 +48,9 @@
                             Notiflix.Notify.failure('Failed to send email');
                             break;
                         case 'SUCCESS_EMAIL_SENT':
-                            Notiflix.Notify.success('Verification code has been sent successfully');
+                            Notiflix.Report.success('Success', 'Verification code has been sent successfully', 'Ok', () => {
+                                window.location.href = '<?= base_url('login') ?>'
+                            });
                             break;
                         case 'ERR_FAILED_TO_INSERT_VERIFICATION_CODE':
                             Notiflix.Report.failure('DB ERROR', 'Failed to create a verification code', 'Ok');
