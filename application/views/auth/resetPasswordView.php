@@ -77,12 +77,12 @@
                             })
                             break;
                         case 'SUCCESS_PASSWORD_RESET':
-                            Notiflix.Report.failure('Error', 'Failed to reset password, please try again.', 'Ok', () => {
-                                window.location.reload();
+                            Notiflix.Report.success('Success', 'Your password has been reset, please log in using your new password.', 'Ok', () => {
+                                window.location.href = '<?= base_url('login') ?>';
                             })
                             break;
-
                         default:
+                            window.location.href = '<?= base_url('login') ?>';
                             break;
                     }
                 })
