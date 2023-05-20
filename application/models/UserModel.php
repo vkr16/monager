@@ -78,6 +78,18 @@ class UserModel extends CI_Model
     public function isRecoveryCodeValid($email, $code)
     {
         // LAST HERE DO SOMETHING TO CHECK IS RECOVERY LINK VALID TO A SPECIFIC USER THEN SHOW A NEW PASSWORD FORM ELSE KICK OUT FROM THIS URL
+        $query = $this->db->select('*')
+            ->from('users')
+            ->where('email', $email)
+            ->where('deleted_at', NULL)
+            ->get();
 
+        $result = $query->result()[0];
+
+        if ($code == $result->code && $result->code_expiration >= time()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

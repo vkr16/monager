@@ -99,7 +99,8 @@ class Auth extends CI_Controller
             $expiration = time() + (60 * 60 * 3);
 
             $this->email->message(
-                '<br><center><h3>ACCOUNT RECOVERY</h3><br>Here is your recovery link <br><br><a href="' . base_url('recovery/verification/') . urlencode(base64_encode($email)) . urlencode(base64_encode($code)) . '/"><h1>RESET PASSWORD</h1></a><br>OR<br><br><code>' . base_url('recovery/verification/') . urlencode(base64_encode($email)) . urlencode(base64_encode($code)) . '</code><br><br><small>The link will remain valid until ' . date('d-m-Y H:i:s', $expiration) . ' (GMT+7)</small></center><br><br>'
+                '<br><center><h3>ACCOUNT RECOVERY</h3><br>Here is your recovery link <br><br><a href="' . base_url('recovery/verification/') . urlencode(base64_encode($email))
+                    . '/' . urlencode(base64_encode($code)) . '/"><h1>RESET PASSWORD</h1></a><br>OR<br><br><code>' . base_url('recovery/verification/') . urlencode(base64_encode($email)) . '/' . urlencode(base64_encode($code)) . '</code><br><br><small>The link will remain valid until ' . date('d-m-Y H:i:s', $expiration) . ' (GMT+7)</small></center><br><br>'
             );
             $this->db->trans_start();
             if ($this->UserModel->insertNewVerificationCode($email, $code, $expiration)) {
@@ -131,9 +132,34 @@ class Auth extends CI_Controller
 
     public function recoveryVerificationView($email, $code)
     {
-        $email = base64_decode(urldecode($email));
+        $data['email'] = base64_decode(urldecode($email));
         $code = base64_decode(urldecode($code));
 
-        $this->UserModel->isRecoveryCodeValid($email, $code);
+        if ($this->UserModel->isRecoveryCodeValid($data['email'], $code) == true) {
+            $this->load->view('auth/resetPasswordView', $data);
+        } else {
+            echo "link not valid";
+        }
+    }
+
+    public function recoveryVerifiedProcess()
+    {
+        $email = $this->input->post('email');
+        $password = $this->input->post('password');
+
+        $this->db->trans_begin();
+        $this->db->set('password', password_hash($password, PASSWORD_DEFAULT))
+            ->where('email', $email)
+            ->update('users');
+
+        $result = $this->db->affected_rows();
+
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            echo "ERR_TRANS_ROLLBACK";
+        } else {
+            $this->db->trans_commit();
+            echo "SUCCESS_PASSWORD_RESET";
+        }
     }
 }
