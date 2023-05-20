@@ -70,6 +70,21 @@
                 })
                 .done((data) => {
                     console.log(data);
+                    switch (data) {
+                        case 'ERR_TRANS_ROLLBACK':
+                            Notiflix.Report.failure('Error', 'Failed to reset password, please try again.', 'Ok', () => {
+                                window.location.reload();
+                            })
+                            break;
+                        case 'SUCCESS_PASSWORD_RESET':
+                            Notiflix.Report.failure('Error', 'Failed to reset password, please try again.', 'Ok', () => {
+                                window.location.reload();
+                            })
+                            break;
+
+                        default:
+                            break;
+                    }
                 })
         }
     </script>

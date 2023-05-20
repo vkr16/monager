@@ -138,7 +138,7 @@ class Auth extends CI_Controller
         if ($this->UserModel->isRecoveryCodeValid($data['email'], $code) == true) {
             $this->load->view('auth/resetPasswordView', $data);
         } else {
-            echo "link not valid";
+            $this->load->view('errors/custom/403');
         }
     }
 
