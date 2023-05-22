@@ -15,6 +15,7 @@ class Pages extends CI_Controller
     {
         $data['categories'] = $this->BudgetModel->getBudgetCategoriesForCurrentUser();
         $data['totalBudgetAllocated'] = $this->BudgetModel->getTotalBudgetAllocated()->total_budget;
+        $data['totalUnpaidDebt'] = $this->BudgetModel->getTotalUnpaidDebt()->total_debt;
         $this->load->view('pages/budgetView', $data);
     }
 

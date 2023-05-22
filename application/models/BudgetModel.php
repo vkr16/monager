@@ -89,4 +89,17 @@ class BudgetModel extends CI_Model
 
         return $query->result()[0];
     }
+
+    public function getTotalUnpaidDebt()
+    {
+        $user_id = $this->UserModel->getUserIdBySession();
+
+        $query = $this->db->select('sum(unpaid) as total_debt')
+            ->from('debts')
+            ->where('user_id', $user_id)
+            ->where('deleted_at', NULL)
+            ->get();
+
+        return $query->result()[0];
+    }
 }
