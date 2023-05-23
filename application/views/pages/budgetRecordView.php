@@ -31,7 +31,7 @@
                     <button class="btn btn-sm btn-outline-danger rounded-0" onclick="deleteBudgetCategory('<?= $budgetId ?>')">
                         <i class="fa-solid fa-radiation fa-fw"></i>&nbsp; Delete
                     </button>&emsp;
-                    <button class="btn btn-sm btn-primary rounded-0" onclick="transferBudget()">
+                    <button class="btn btn-sm btn-outline-dark rounded-0" onclick="transferBudget()">
                         <i class="fa-solid fa-arrow-right-arrow-left fa-fw"></i>&nbsp; Transfer
                     </button>
                 </div>
