@@ -39,7 +39,7 @@ class Pages extends CI_Controller
         if ($this->BudgetModel->isExist($data['budgetId'])) {
             $data['records'] = $this->RecordModel->getAllRecordOfABudget($data['budgetId']);
             $data['budgetDetail'] = $this->BudgetModel->getBudgetDetail($data['budgetId'])[0];
-            $data['budgetCategories'] = $this->BudgetModel->getBudgetCategoriesForCurrentUser();
+            $data['budgetCategories'] = $this->BudgetModel->getBudgetCategoriesForCurrentUser($data['budgetId']);
             $this->load->view('pages/budgetRecordView', $data);
         } else {
             $this->load->view('errors/custom/404');

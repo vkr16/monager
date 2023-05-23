@@ -27,7 +27,7 @@ class BudgetModel extends CI_Model
             ->where('user_id', $user_id)
             ->where('deleted_at', NULL);
         if ($e !== NULL) {
-            $this->db->where('category !=', $e);
+            $this->db->where('id !=', $e);
         }
         $query = $this->db->get();
 
