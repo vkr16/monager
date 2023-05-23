@@ -30,6 +30,9 @@
                     </button>&emsp;
                     <button class="btn btn-sm btn-outline-danger rounded-0" onclick="deleteBudgetCategory('<?= $budgetId ?>')">
                         <i class="fa-solid fa-radiation fa-fw"></i>&nbsp; Delete
+                    </button>&emsp;
+                    <button class="btn btn-sm btn-primary rounded-0" onclick="transferBudget()">
+                        <i class="fa-solid fa-arrow-right-arrow-left fa-fw"></i>&nbsp; Transfer
                     </button>
                 </div>
 
@@ -126,6 +129,44 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modalBudgetTransfer" aria-labelledby="modalBudgetTransferLabel" aria-hidden="true">
+        <div class="modal-dialog" id="modalDialogBudgetTransfer">
+            <div class="modal-content rounded-0">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalBudgetTransferLabel">Transfer</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="inputAmountTransfer">Amount</label>
+                        <input type="number" class="form-control" id="inputAmountTransfer" placeholder="Amount">
+                    </div>
+                    <div class="mb-3">
+                        <label for="selectTransferDestination">Transfer to</label>
+                        <select class="select2 rounded-0" name="selectTransferDestination" id="selectTransferDestination">
+                            <?php
+                            foreach ($budgetCategories as $key => $category) {
+                            ?>
+                                <option value="<?= $category->id ?>"><?= $category->category ?></option>
+                            <?php
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <!-- <div class="mb-3">
+                        <label for="inputTransferNote">Description</label>
+                        <input type="text" class="form-control" id="inputTransferNote" placeholder="Description">
+                    </div> -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark rounded-0" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger rounded-0" id="btnSubmitTransfer" onclick="submitBudgetTransfer()">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
     <!-- Script -->
     <?php $this->load->view('partial_components/scriptPart'); ?>
@@ -137,6 +178,10 @@
             // Datatables
             $('#table_record').DataTable({
                 "ordering": false
+            });
+            $('.select2').select2({
+                dropdownParent: $("#modalBudgetTransfer"),
+                theme: "bootstrap-5"
             });
         });
 
@@ -192,7 +237,6 @@
                 })
                 .done((data) => {
                     Notiflix.Block.remove('#modalDialogAddBudgetRecord');
-
                     switch (data) {
                         case 'SUCCESS_RECORD_INSERTED':
                             Notiflix.Report.success(
@@ -318,6 +362,48 @@
             }
 
             return result;
+        }
+
+        function transferBudget() {
+            $('#modalBudgetTransfer').modal('show');
+        }
+
+        function submitBudgetTransfer() {
+            const transferOrigin = '<?= $budgetId ?>';
+            const transferAmount = $('#inputAmountTransfer').val();
+            const transferDestination = $('#selectTransferDestination').val();
+            // const transferNote = $('#inputTransferNote').val();
+
+            // console.log(transferOrigin, transferAmount, transferDestination, transferNote);
+
+            $.post("<?= base_url('budget/transfer/process') ?>", {
+                    transferOrigin: transferOrigin,
+                    transferAmount: transferAmount,
+                    transferDestination: transferDestination
+                    // transferNote: transferNote
+                })
+                .done((data) => {
+                    switch (data) {
+                        case 'ERR_NOT_ENOUGH_CREDIT':
+                            Notiflix.Report.failure('Error', 'Not enough budget to be transferred', 'Ok')
+                            break;
+                        case 'ERR_FAILED_TO_INSERT_RECORD':
+                            Notiflix.Report.failure('Error', 'Failed to transfer, something wrong in our back-end', 'Ok')
+                            break;
+                        case 'SUCCESS_RECORD_INSERTED':
+                            Notiflix.Report.success('Success', 'Money has been transfered', 'Ok', () => {
+                                window.location.reload();
+                            })
+                            break;
+                        case 'UNPREDICTED_ERROR_OCCURED':
+                            Notiflix.Report.failure('Unknown Error', 'Something unpredicted has occured in our back-end', 'Ok', () => {
+                                window.location.reload();
+                            })
+                            break;
+                        default:
+                            break;
+                    }
+                })
         }
     </script>
 </body>

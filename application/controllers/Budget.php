@@ -89,4 +89,46 @@ class Budget extends CI_Controller
             echo 'ERR_UNAUTHORIZED_ACTION';
         }
     }
+
+    public function budgetTransferProcess()
+    {
+        $transferOrigin = $this->input->post('transferOrigin');
+        $transferDestination = $this->input->post('transferDestination');
+        $transferAmount = $this->input->post('transferAmount');
+        // $transferNote = $this->input->post('transferNote');
+
+        $destinationBudgetName = $this->BudgetModel->getBudgetDetail($transferDestination)[0]->category;
+        $originBudgetName = $this->BudgetModel->getBudgetDetail($transferOrigin)[0]->category;
+
+        $transferNoteOut = "Transfer Rp " . number_format($transferAmount, 0, ',', '.') . " to \"" . $destinationBudgetName . "\"";
+        $transferNoteIn = "Received Rp " . number_format($transferAmount, 0, ',', '.') . " from \"" . $originBudgetName . "\"";
+
+        $outLog = [
+            'budget_id' => $transferOrigin,
+            'amount' => $transferAmount,
+            'type' => 0,
+            'description' => $transferNoteOut
+        ];
+        $inLog = [
+            'budget_id' => $transferDestination,
+            'amount' => $transferAmount,
+            'type' => 1,
+            'description' => $transferNoteIn
+        ];
+
+        switch ($this->RecordModel->insertNewTransferRecord($outLog, $inLog)) {
+            case 'ERR_NOT_ENOUGH_CREDIT':
+                echo 'ERR_NOT_ENOUGH_CREDIT';
+                break;
+            case 'ERR_FAILED_TO_INSERT_RECORD':
+                echo 'ERR_FAILED_TO_INSERT_RECORD';
+                break;
+            case 'SUCCESS_RECORD_INSERTED':
+                echo 'SUCCESS_RECORD_INSERTED';
+                break;
+            default:
+                echo 'UNPREDICTED_ERROR_OCCURED';
+                break;
+        }
+    }
 }

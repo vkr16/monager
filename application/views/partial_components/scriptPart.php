@@ -2,6 +2,7 @@
 <script src="<?= base_url('assets/library/jquery-3.6.1.min.js') ?>"></script>
 <script src="<?= base_url('assets/library/notiflix-aio-3.2.5.min.js') ?>"></script>
 <script src="<?= base_url('assets/library/datatables-1.13.4/datatables.min.js') ?>"></script>
+<script src="<?= base_url('assets/library/select2-4.0.13/js/select2.min.js') ?>"></script>
 <script>
     Notiflix.Notify.init({
         showOnlyTheLastOne: true,

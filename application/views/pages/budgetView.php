@@ -23,7 +23,9 @@
                 <hr class="mt-05" style="max-width: 200px;border: 2px solid; opacity: 1 ">
                 <div class="d-flex flex-wrap">
                     <div class="bg-white text-dark border border-1 border-dark rounded-0 px-2 py-1 mb-3">Total Budget : Rp <?= number_format($totalBudgetAllocated == null ? '0' : $totalBudgetAllocated, 0, ',', '.') ?></div>&emsp;
-                    <div class="bg-white text-danger border border-1 border-danger rounded-0 px-2 py-1 mb-3">Unpaid Debt : Rp <?= number_format($totalUnpaidDebt == null ? '0' : $totalUnpaidDebt, 0, ',', '.') ?></div>
+                    <a href="<?= base_url('debt') ?>">
+                        <div role="button" class="bg-white text-danger border border-1 border-danger rounded-0 px-2 py-1 mb-3">Unpaid Debt : Rp <?= number_format($totalUnpaidDebt == null ? '0' : $totalUnpaidDebt, 0, ',', '.') ?></div>
+                    </a>
                 </div>
                 <div class="d-flex mb-5">
                     <button class="btn btn-danger btn-sm rounded-0" data-bs-toggle="modal" data-bs-target="#modalAddBudgetCategory">

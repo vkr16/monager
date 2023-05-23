@@ -5,7 +5,7 @@ class RecordModel extends CI_Model
     {
         $record['created_at'] = time();
 
-        $this->db->trans_start();
+        $this->db->trans_begin();
 
         $query = $this->db->select('budget')
             ->from('budgets')
@@ -34,8 +34,6 @@ class RecordModel extends CI_Model
         $this->db->set($record)
             ->insert('records');
 
-        $this->db->trans_complete();
-
         if ($this->db->trans_status() === FALSE) {
             $this->db->trans_rollback();
             return FALSE;
@@ -55,5 +53,51 @@ class RecordModel extends CI_Model
             ->get();
 
         return $query->result();
+    }
+
+    public function insertNewTransferRecord($outLog, $inLog)
+    {
+        $this->db->trans_begin();
+        $rawQueryGetOriginBudget = $this->db->select('budget')
+            ->from('budgets')
+            ->where('id', $outLog['budget_id'])
+            ->get_compiled_select();
+
+        $rawQueryGetDestinationBudget = $this->db->select('budget')
+            ->from('budgets')
+            ->where('id', $inLog['budget_id'])
+            ->get_compiled_select();
+
+        $queryGetOriginBudget = $rawQueryGetOriginBudget . ' FOR UPDATE';
+        $queryGetDestinationBudget = $rawQueryGetDestinationBudget . ' FOR UPDATE';
+
+        $originBudget = $this->db->query($queryGetOriginBudget)->result()[0]->budget;
+        $destinationBudget = $this->db->query($queryGetDestinationBudget)->result()[0]->budget;
+
+        if ($originBudget < $outLog['amount']) {
+            return 'ERR_NOT_ENOUGH_CREDIT';
+        } else {
+            $outLog['created_at'] = time();
+            $inLog['created_at'] = time();
+
+            $this->db->set('budget', $originBudget - $outLog['amount'])
+                ->where('id', $outLog['budget_id'])
+                ->update('budgets');
+
+            $this->db->set('budget', $destinationBudget + $inLog['amount'])
+                ->where('id', $inLog['budget_id'])
+                ->update('budgets');
+
+            $this->db->insert('records', $outLog);
+            $this->db->insert('records', $inLog);
+
+            if ($this->db->trans_status() === FALSE) {
+                $this->db->trans_rollback();
+                return 'ERR_FAILED_TO_INSERT_RECORD';
+            } else {
+                $this->db->trans_commit();
+                return 'SUCCESS_RECORD_INSERTED';
+            }
+        }
     }
 }

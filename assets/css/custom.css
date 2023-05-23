@@ -83,3 +83,16 @@ input[type="checkbox"]:checked,
     background-color: #dc3545 !important;
     color: white !important;
 }
+
+.select2 {
+    width: 100% !important;
+    border-radius: 0px !important;
+}
+
+.selection {
+    border-radius: 0px !important;
+}
+
+#select2-category-container{
+    height: 37px !important;
+}

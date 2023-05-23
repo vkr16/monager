@@ -19,14 +19,17 @@ class BudgetModel extends CI_Model
         return $count > 0 ? TRUE : FALSE;
     }
 
-    public function getBudgetCategoriesForCurrentUser()
+    public function getBudgetCategoriesForCurrentUser($e = NULL)
     {
         $user_id = $this->UserModel->getUserIdBySession();
-        $query = $this->db->select('id,category,budget')
+        $this->db->select('id,category,budget')
             ->from('budgets')
             ->where('user_id', $user_id)
-            ->where('deleted_at', NULL)
-            ->get();
+            ->where('deleted_at', NULL);
+        if ($e !== NULL) {
+            $this->db->where('category !=', $e);
+        }
+        $query = $this->db->get();
 
         return $query->result();
     }

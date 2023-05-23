@@ -71,6 +71,8 @@ $route['budget/category/delete'] = 'budget/budgetCategoryDeleteProcess';
 $route['budget/category/update'] = 'budget/budgetCategoryUpdateProcess';
 $route['budget/record/add'] = 'budget/budgetRecordAddProcess';
 $route['budget/record/detail/(:any)'] = 'pages/budgetRecordView/$1';
+$route['budget/transfer/process'] = 'budget/budgetTransferProcess';
+
 
 
 $route['debt'] = 'pages/debtView';
